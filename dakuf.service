@@ -1,0 +1,13 @@
+[Unit]
+Description=DAKUF Server
+After=network.target
+
+[Service]
+WorkingDirectory=%h/dakuf/
+ExecStart=/dakuf/venv/bin/python app.py
+TimeoutStopSec=2
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
