@@ -13,13 +13,12 @@ class DuetFileItem:
 
     @staticmethod
     def from_klipper_file_info(klipper_file_info: KlipperFileInfo):
-        print('cacca:', klipper_file_info)
-        path = klipper_file_info['path'].split('/')
+        klipper_path = klipper_file_info.path.split('/')
         return DuetFileItem(
-            type='d' if len(path) > 1 else 'f',
-            name=path[-1],
-            size=klipper_file_info['size'],
-            date=datetime.fromtimestamp(klipper_file_info['modified']).isoformat()
+            type='f',
+            name=klipper_path[-1],
+            size=klipper_file_info.size,
+            date=datetime.fromtimestamp(klipper_file_info.modified).isoformat()
         )
 
 @dataclass
@@ -36,11 +35,37 @@ class DuetFileList:
     files: List[DuetFileItem]
 
     @staticmethod
-    def from_klipper_file_list(klipper_file_list: KlipperFileList, dir: str = 'gcodes'):
+    def from_klipper_tree(klipper_tree: dict, dir: str = 'gcodes'):
+        dir_parts = dir.split('/')
+        root = dir_parts[0]
+        path = dir_parts[1:] if len(dir_parts) > 1 else []
+        try:
+            for part in path:
+                klipper_tree = klipper_tree[part]
+        except KeyError:
+            return DuetFileList(
+                dir=dir,
+                first=0,
+                next=0,
+                err=2,
+                files=[]
+            )
+        files = []
+        for key, value in klipper_tree.items():
+            print(type(value))
+            if isinstance(value, KlipperFileInfo):
+                files.append(DuetFileItem.from_klipper_file_info(value))
+            else:
+                files.append(DuetFileItem(
+                    type='d',
+                    name=key,
+                    size=0,
+                    date=''
+                ))
         return DuetFileList(
             dir=dir,
             first=0,
             next=0,
             err=0,
-            files=[DuetFileItem.from_klipper_file_info(klipper_file_info) for klipper_file_info in klipper_file_list.result]
+            files=files
         )
