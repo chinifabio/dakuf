@@ -3,8 +3,8 @@ Description=DAKUF Server
 After=network.target
 
 [Service]
-WorkingDirectory=%h/dakuf/
-ExecStart=%h/dakuf/venv/bin/python app.py
+WorkingDirectory=/home/pi/dakuf/
+ExecStart=/home/pi/dakuf/venv/bin/python app.py
 TimeoutStopSec=2
 Restart=always
 RestartSec=5
