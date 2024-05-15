@@ -1,4 +1,4 @@
-VENV_NAME := venv
+VENV_NAME := dakuf-env
 SERVICE_FILE := dakuf.service
 SYSTEMD_DIR := /etc/systemd/system
 
@@ -12,6 +12,7 @@ check_root:
 install: check_root create_venv enable_service
 
 create_venv:
+	rm -rf $(VENV_NAME)
 	python3 -m venv $(VENV_NAME)
 	$(VENV_NAME)/bin/pip install -r requirements.txt
 

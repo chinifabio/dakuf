@@ -6,8 +6,8 @@ After=network.target
 User=pi
 Group=www-data
 WorkingDirectory=/home/pi/dakuf/
-Environment="PATH=/home/pi/dakuf/venv/bin"
-ExecStart=/home/pi/dakuf/venv/bin/gunicorn --bind 0.0.0.0:8888 app:app
+Environment="PATH=/home/pi/dakuf/dakuf-env/bin"
+ExecStart=/home/pi/dakuf/dakuf-env/bin/gunicorn --bind 0.0.0.0:8888 app:app
 TimeoutStopSec=2
 Restart=always
 RestartSec=5

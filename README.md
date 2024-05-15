@@ -7,5 +7,18 @@
 To install DAKUF, run the following command:
 
 ```bash
-make install
+sudo make install
+```
+
+Insert into the `moonraker.conf` file the following lines:
+
+```ini
+[update_manager dakuf]
+type: git_repo
+path: ~/dakuf
+origin: https://github.com/chinifabio/dakuf.git
+virtualenv: ~/dakuf/dakuf-env/
+requirements: requirements.txt
+install_script: install.sh
+managed_service: dakuf
 ```

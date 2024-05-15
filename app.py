@@ -1,14 +1,10 @@
 from flask import Flask, jsonify, request
-import requests as http
-from dotenv import load_dotenv
-import os, re
+import requests as http, re
 
 from klipper_model import *
 from duet_model import *
 
-load_dotenv()
-
-KLIPPER_HOST = os.getenv("KLIPPER_HOST")
+KLIPPER_HOST = "localhost:7125"
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
