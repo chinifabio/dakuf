@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 from datetime import datetime
 
-from klipper_model import KlipperFileInfo, KlipperFileList
+from klipper_model import KlipperFileInfo
 
 @dataclass
 class DuetFileItem:
@@ -37,7 +37,6 @@ class DuetFileList:
     @staticmethod
     def from_klipper_tree(klipper_tree: dict, dir: str = 'gcodes'):
         dir_parts = dir.split('/')
-        root = dir_parts[0]
         path = dir_parts[1:] if len(dir_parts) > 1 else []
         try:
             for part in path:

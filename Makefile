@@ -3,7 +3,14 @@ VENV_ACTIVATE := $(VENV_NAME)/bin/activate
 SERVICE_FILE := dakuf.service
 SYSTEMD_DIR := /etc/systemd/system
 
-install: create_venv enable_service
+check_root:
+	@if [ "$$(id -u)" -ne 0 ]; then \
+		echo "This script must be run as root"; \
+		exit 1; \
+	fi
+	@echo "Running as root"
+
+install: check_root create_venv enable_service
 
 create_venv:
 	python3 -m venv $(VENV_NAME)
@@ -17,4 +24,4 @@ enable_service:
 clean:
 	rm -rf $(VENV_NAME)
 
-.PHONY: install create_venv enable_service clean
+.PHONY: install create_venv enable_service clean check_root

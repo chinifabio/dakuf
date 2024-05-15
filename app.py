@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, Request
+from flask import Flask, jsonify, request
 import requests as http
 from dotenv import load_dotenv
 import os, re
@@ -9,16 +9,6 @@ from duet_model import *
 load_dotenv()
 
 KLIPPER_HOST = os.getenv("KLIPPER_HOST")
-
-state = {}
-state['last_upload_error'] = False
-state['last_upload_error_cause'] = ""
-state['root_dirs'] = ['gcodes']
-
-target_url = f"http://{KLIPPER_HOST}/server/files/roots"
-response = http.get(target_url)
-if response.status_code == 200:
-    state['root_dirs'] += [x['name'] for x in response.json()['result']]
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024
@@ -54,15 +44,8 @@ def gcode():
             "cause": response.text
         })
 
-@app.route('/rr_upload', methods=['GET'])
-def get_upload():
-    if state['last_upload_error']:
-        return jsonify({ "err": 1, "cause": state['last_upload_error_cause'] })
-    else:
-        return jsonify({ "err": 0 })
-
 @app.route('/rr_upload', methods=['POST'])
-def post_upload():
+def upload():
     """
     Upload a file to the printer
 
@@ -79,12 +62,8 @@ def post_upload():
     response = http.post(target_url, files=files)
 
     if response.status_code in [200, 201]:
-        state['last_upload_error'] = False
-        state['last_upload_error_cause'] = ''
         return jsonify({ "err": 0 })
     else:
-        state['last_upload_error'] = True
-        state['last_upload_error_cause'] = response.text
         return jsonify({ "err": 1, "cause": "Error uploading file" })
 
 def is_valid_root(root):
