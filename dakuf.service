@@ -3,8 +3,11 @@ Description=DAKUF Server
 After=network.target
 
 [Service]
+User=pi
+Group=www-data
 WorkingDirectory=/home/pi/dakuf/
-ExecStart=/home/pi/dakuf/venv/bin/python app.py
+Environment="PATH=/home/pi/dakuf/venv/bin"
+ExecStart=/home/pi/dakuf/venv/bin/gunicorn --bind 0.0.0.0:8888 app:app
 TimeoutStopSec=2
 Restart=always
 RestartSec=5
