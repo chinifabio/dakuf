@@ -21,5 +21,6 @@ class KlipperFileList:
                 if part not in current:
                     current[part] = {}
                 current = current[part]
-            current[path[-1]] = KlipperFileInfo(**file)
+            if not path[-1].startswith('.'):
+                current[path[-1]] = KlipperFileInfo(**file)
         return tree
