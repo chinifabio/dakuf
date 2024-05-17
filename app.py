@@ -22,7 +22,7 @@ def gcode():
             "buff": 1000
         })
 
-    start_print_re = re.compile(r'M32\s"(\w+)"')
+    start_print_re = re.compile(r'M32\s+\"?([\w. \-/]+)\"?')
     match = start_print_re.match(gcode)
     if match:
         target_url = f"http://{KLIPPER_HOST}/printer/print/start?filename={match.group(1)}"
